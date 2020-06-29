@@ -13,7 +13,6 @@ import com.pratap.springcloud.model.Product;
 import com.pratap.springcloud.repos.ProductRepo;
 
 @RestController
-@RequestMapping("/prodcutapi")
 public class ProductRestController {
 
 	@Autowired
@@ -28,9 +27,14 @@ public class ProductRestController {
 	@RequestMapping(value = "/products", method = RequestMethod.POST)
 	public Product create(@RequestBody Product product) {
 
-		Coupon coupon = restTemplate.getForObject(couponServiceURL + product.getCouponCode(),
-				Coupon.class);
-		product.setPrice(product.getPrice().subtract(coupon.getDiscount()));
+		if(product.getCouponCode() != null) {
+			
+			Coupon coupon = restTemplate.getForObject(couponServiceURL + product.getCouponCode(),
+					Coupon.class);
+			product.setPrice(product.getPrice().subtract(coupon.getDiscount()));
+		} else {
+			throw new RuntimeException("Coupon code is Not valid");
+		}
 		return repository.save(product);
 	}
 }
