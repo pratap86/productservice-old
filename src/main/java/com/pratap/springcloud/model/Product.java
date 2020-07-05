@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Product {
@@ -18,6 +20,8 @@ public class Product {
 	private String description;
 	private BigDecimal price;
 	@Transient
+	@NotEmpty
+	@Size(min = 9, message = "Coupon code should have atleast 9 chars")
 	private String couponCode;
 
 	public Long getId() {
